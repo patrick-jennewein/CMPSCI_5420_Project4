@@ -1,5 +1,5 @@
 import argparse
-
+import sys
 
 def parse() -> dict:
     """parse command-line arguments or use default arguments if none are given."""
@@ -25,6 +25,14 @@ def parse() -> dict:
     print(f"method: {args.m}")
     print(f"image to match: {args.i}")
     print(f"image file to match: {args.f}")
+
+    # Error handling for -m argument
+    if args.m == 2 and not args.i:
+        print("ERROR: an image to match ('-i') is required when -m is set to 2.")
+        sys.exit(1)
+    if args.m == 3 and not args.f:
+        print("ERROR: a file to match ('-f') is required when -m is set to 3.")
+        sys.exit(1)
 
     # convert to dictionary and return
     args_dict = vars(args)
