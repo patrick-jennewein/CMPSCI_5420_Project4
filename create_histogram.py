@@ -1,11 +1,36 @@
-# histogram.py
 import cv2
+import csv
 import matplotlib.pyplot as plt
 
 def make_histogram(image):
     """Create the histogram of a grayscale image."""
-    histogram = cv2.calcHist([image], [0], None, [256], [0, 256])
+    histogram = cv2.calcHist([image],
+                             [0],
+                             None,
+                             [256],
+                             [0, 256])
     histogram = histogram.flatten()
+    return histogram
+
+
+def make_histogram_from_csv(csv_file):
+    """create a histogram from a .csv file with 256 probability values."""
+    histogram = []
+
+    # read csv file with 256 floats
+    with open(csv_file, newline='') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            if len(row) == 1:
+                try:
+                    value = float(row[0])
+                    histogram.append(value)
+                except ValueError:
+                    print(f"invalid row: {row}")
+
+    if len(histogram) != 256:
+        raise ValueError("csv file does not contain exactly 256 lines")
+
     return histogram
 
 def print_hist_comparison(image1, image2, histogram1, histogram2):
@@ -26,10 +51,8 @@ def print_hist_comparison(image1, image2, histogram1, histogram2):
     for intensity in range(256):
         freq1 = int(histogram1[intensity])
         freq2 = int(histogram2[intensity])
-
         prob1 = freq1 / total_pixels_1
         prob2 = freq2 / total_pixels_2
-
         freq_diff = freq1 - freq2
 
         # colorize differences

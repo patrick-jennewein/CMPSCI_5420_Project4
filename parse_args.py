@@ -26,7 +26,7 @@ def parse() -> dict:
     print(f"image to match: {args.i}")
     print(f"image file to match: {args.f}")
 
-    # Error handling for -m argument
+    # error handling for -m argument
     if args.m == 2 and not args.i:
         print("ERROR: an image to match ('-i') is required when -m is set to 2.")
         sys.exit(1)
